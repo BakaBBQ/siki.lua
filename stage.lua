@@ -37,8 +37,13 @@ function decorateStage()
     end
   end
 
+  local function drawSingleBox(x, y, w, h, c1, c2)
+
+  end
+
 
   drawLines()
   drawMouseCoord()
   drawFrameImage()
+
 end

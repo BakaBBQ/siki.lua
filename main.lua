@@ -25,6 +25,7 @@ function loadFrame(relative_path)
   print(currentFrameData)
   image = love.graphics.newImage(love.image.newImageData(love.filesystem.newFileData(contents, 'Images/character.png')))
   datautils.saveCurrentState()
+  refreshFlagList()
   return image
 end
 

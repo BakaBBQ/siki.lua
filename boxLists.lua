@@ -9,28 +9,68 @@ boxListFrame:ShowCloseButton(false)
 
 
 local boxlist = loveframes.Create("columnlist", boxListFrame)
-boxlist.defaultcolumnwidth = (boxListFrame:GetWidth() - 10)
+boxlist.defaultcolumnwidth = ((boxListFrame:GetWidth() - 10) / 3)
 boxlist:SetPos(5,30)
 boxlist:SetSize(boxListFrame:GetWidth() - 10, boxListFrame:GetHeight() - 60)
-boxlist:AddColumn("Boxs")
-
+boxlist:AddColumn("Type")
+boxlist:AddColumn("Pos")
+boxlist:AddColumn("Size")
 
 local createRedButton = loveframes.Create("button",boxListFrame)
 createRedButton:SetWidth((boxListFrame:GetWidth() - 10)/3)
 createRedButton:SetText("Create Hitbox")
 createRedButton:SetPos(8, boxListFrame:GetHeight() - 28)
+createRedButton.OnClick = function(object)
+  addNewRedBox()
+  refreshBoxList()
+end
+
 
 
 local createGreenButton = loveframes.Create("button", boxListFrame)
 createGreenButton:SetWidth(createRedButton:GetWidth())
 createGreenButton:SetText("Create Hurtbox")
 createGreenButton:SetPos(createRedButton:GetX() + createRedButton:GetWidth(), boxListFrame:GetHeight() - 28)
-
+createGreenButton.OnClick = function(object)
+  addNewGreenBox()
+  refreshBoxList()
+end
 local deleteBox = loveframes.Create("button", boxListFrame)
 deleteBox:SetWidth(createRedButton:GetWidth())
 deleteBox:SetText("Delete Box")
 deleteBox:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 2, boxListFrame:GetHeight() - 28)
 
-function getCurrentBoxes()
-  currentFrameData[]  
+function getCurrentRedBoxes()
+  return currentFrameData['redboxes']
+end
+
+function getCurrentGreenBoxes()
+  return currentFrameData['greenboxes']
+end
+
+function addNewRedBox()
+  table.insert(currentFrameData['redboxes'], newRedBox())
+end
+
+function addNewGreenBox()
+  table.insert(currentFrameData['greenboxes'], newGreenBox())
+end
+
+
+
+function refreshBoxList()
+  local function formatRect(rect)
+    return ("pos " .. rect['x'] .. ',' .. rect['y'] .. ' | ' .. 'size ' .. rect['w'] .. ',' .. rect['h'])
+  end
+
+  boxlist:Clear()
+  for k, v in pairs(getCurrentRedBoxes()) do
+    local rect = v
+    boxlist:AddRow("HitBox", rect['x'] .. ', ' .. rect['y'], rect['w'] .. ', ' .. rect['h'])
+  end
+
+  for k, v in pairs(getCurrentGreenBoxes()) do
+    local rect = v
+    boxlist:AddRow("HurtBox", rect['x'] .. ', ' .. rect['y'], rect['w'] .. ', ' .. rect['h'])
+  end
 end
