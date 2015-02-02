@@ -1,5 +1,6 @@
 
 currentFrameImage = nil
+require("stage")
 function love.load()
   loveframes = require("love-frames")
   loveframes.util.RemoveAll()

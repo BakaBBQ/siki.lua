@@ -7,7 +7,10 @@ frame:SetName("FileList")
 frame:SetSize(love.graphics.getWidth() / 4, love.graphics.getHeight())
 frame:SetPos(0,0)
 frame:SetDraggable(false)
+frame:ShowCloseButton(false)
+
 local filelist = loveframes.Create("columnlist", frame)
+filelist.defaultcolumnwidth = 175
 filelist:SetPos(5,30)
 filelist:SetSize(frame:GetWidth() - 10, frame:GetHeight() - 60)
 
