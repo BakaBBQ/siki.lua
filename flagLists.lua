@@ -77,14 +77,6 @@ function getCurrentFlags()
   return currentFrameData['flags']
 end
 
-local function texteditKeyValue(object, text)
-  print("KeyValue changed")
-  -- first clear the original pair
-
-  --
-end
-
-
 function refreshFlagList()
   flaglist:Clear()
   for k, v in pairs(getCurrentFlags()) do

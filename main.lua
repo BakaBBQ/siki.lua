@@ -5,7 +5,7 @@ require("datautils")
 -- frameDatas, a filename -> framedata hash
 frameDatas = {}
 frameDatas = datautils.loadJson()
-currentFrameData = 0
+currentFrameData = nil
 require("stage")
 function love.load()
   loveframes = require("love-frames")
@@ -26,6 +26,7 @@ function loadFrame(relative_path)
   image = love.graphics.newImage(love.image.newImageData(love.filesystem.newFileData(contents, 'Images/character.png')))
   datautils.saveCurrentState()
   refreshFlagList()
+  refreshBoxList()
   return image
 end
 

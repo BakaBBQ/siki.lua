@@ -13,22 +13,22 @@ function Box:initialize(x,y,w,h,hurt)
   self.isHurtbox = hurt
 end
 
-function newBox(isHurtBox)
+function newBox()
   return {
     x = lume.round(lume.random(-100,100));
     y = lume.round(lume.random(-100,100));
     w = lume.round(lume.random(30,120));
     h = lume.round(lume.random(30,120));
-    isHurt = isHurtBox
+    active = false
   }
 end
 
 function newRedBox()
-  return newBox(false)
+  return newBox()
 end
 
 function newGreenBox()
-  return newBox(true)
+  return newBox()
 end
 
 

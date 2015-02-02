@@ -6,15 +6,25 @@ boxListFrame:SetSize(love.graphics.getWidth() / 4 * 3 / 2, love.graphics.getHeig
 boxListFrame:SetPos(love.graphics.getWidth() / 4, love.graphics.getHeight() - love.graphics.getHeight() / 3)
 boxListFrame:SetDraggable(false)
 boxListFrame:ShowCloseButton(false)
+function table_invert(t)
+   local s={}
+   for k,v in pairs(t) do
+     s[v]=k
+   end
+   return s
+end
 
-
-local boxlist = loveframes.Create("columnlist", boxListFrame)
+boxlist = loveframes.Create("columnlist", boxListFrame)
 boxlist.defaultcolumnwidth = ((boxListFrame:GetWidth() - 10) / 3)
 boxlist:SetPos(5,30)
 boxlist:SetSize(boxListFrame:GetWidth() - 10, boxListFrame:GetHeight() - 60)
 boxlist:AddColumn("Type")
 boxlist:AddColumn("Pos")
 boxlist:AddColumn("Size")
+boxlist.OnRowSelected = function(parent, row, data)
+  
+end
+
 
 local createRedButton = loveframes.Create("button",boxListFrame)
 createRedButton:SetWidth((boxListFrame:GetWidth() - 10)/3)
