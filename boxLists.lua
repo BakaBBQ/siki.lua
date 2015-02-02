@@ -30,3 +30,7 @@ local deleteBox = loveframes.Create("button", boxListFrame)
 deleteBox:SetWidth(createRedButton:GetWidth())
 deleteBox:SetText("Delete Box")
 deleteBox:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 2, boxListFrame:GetHeight() - 28)
+
+function getCurrentBoxes()
+  currentFrameData[]  
+end

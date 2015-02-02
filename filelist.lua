@@ -1,6 +1,6 @@
 require("filesystem")
 
-local root = "/Users/Cheryl/Desktop/actor/mamizou"
+
 frame = 0
 frame = loveframes.Create("frame")
 frame:SetName("FileList")
@@ -18,16 +18,18 @@ filelist:SetColumnName(1,".w.")
 filelist:Clear()
 
 filelist:AddColumn("PNG Files")
+
+files = scandir(root)
 function refreshFiles()
   filelist:Clear()
-  for k, v in pairs(scandir(root)) do
+  for k, v in pairs(files) do
     if string.find(v, '.+png') then
       filelist:AddRow(v)
     end
   end
   filelist.OnRowClicked = function(parent, row, rowdata)
     for k, v in ipairs(rowdata) do
-      currentFrameImage = loadFrame(root .. '/' .. v)
+      currentFrameImage = loadFrame(v)
       print(currentFrameImage)
     end
 

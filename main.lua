@@ -1,5 +1,11 @@
 
 currentFrameImage = nil
+root = "/Users/Cheryl/Desktop/actor/mamizou"
+require("datautils")
+-- frameDatas, a filename -> framedata hash
+frameDatas = {}
+frameDatas = datautils.loadJson()
+currentFrameData = 0
 require("stage")
 function love.load()
   loveframes = require("love-frames")
@@ -9,14 +15,17 @@ function love.load()
   require("filelist")
 end
 
-function loadFrame(absolute_path)
+function loadFrame(relative_path)
+  local absolute_path = root .. '/' .. relative_path
   print(absolute_path)
   local f = io.open(absolute_path)
   local contents = f:read('*a')
   f:close()
+  currentFrameData = datautils.retrieveFrameData(relative_path)
+  print(currentFrameData)
   image = love.graphics.newImage(love.image.newImageData(love.filesystem.newFileData(contents, 'Images/character.png')))
+  datautils.saveCurrentState()
   return image
-
 end
 
 
