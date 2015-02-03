@@ -31,8 +31,11 @@ addFlagButton:SetText("+")
 addFlagButton:SetPos(5, flagListFrame:GetHeight() - 28)
 
 addFlagButton.OnClick = function(object)
-  addNewFlag()
-  refreshFlagList()
+  if currentFrameData then
+    addNewFlag()
+    refreshFlagList()
+  end
+
 end
 
 local deleteFlagButton = loveframes.Create("button", flagListFrame)

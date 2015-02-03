@@ -22,7 +22,7 @@ boxlist:AddColumn("Type")
 boxlist:AddColumn("Pos")
 boxlist:AddColumn("Size")
 boxlist.OnRowSelected = function(parent, row, data)
-  
+
 end
 
 
@@ -31,8 +31,13 @@ createRedButton:SetWidth((boxListFrame:GetWidth() - 10)/3)
 createRedButton:SetText("Create Hitbox")
 createRedButton:SetPos(8, boxListFrame:GetHeight() - 28)
 createRedButton.OnClick = function(object)
-  addNewRedBox()
-  refreshBoxList()
+  if currentFrameData then
+    addNewRedBox()
+    refreshBoxList()
+  else
+    minibuffer = 'load a frame first'
+  end
+
 end
 
 
@@ -42,13 +47,43 @@ createGreenButton:SetWidth(createRedButton:GetWidth())
 createGreenButton:SetText("Create Hurtbox")
 createGreenButton:SetPos(createRedButton:GetX() + createRedButton:GetWidth(), boxListFrame:GetHeight() - 28)
 createGreenButton.OnClick = function(object)
-  addNewGreenBox()
-  refreshBoxList()
+  if currentFrameData then
+    addNewGreenBox()
+    refreshBoxList()
+  else
+    minibuffer = 'load a frame first'
+  end
+
+
 end
 local deleteBox = loveframes.Create("button", boxListFrame)
 deleteBox:SetWidth(createRedButton:GetWidth())
 deleteBox:SetText("Delete Box")
 deleteBox:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 2, boxListFrame:GetHeight() - 28)
+deleteBox.OnClick = function(object)
+  if currentFrameData then
+    deleteActiveBox()
+  else
+    minibuffer = 'load a frame first'
+  end
+end
+
+
+function deleteActiveBox()
+  for k,v in pairs(getCurrentRedBoxes()) do
+    if v == stage.getActiveBox() then
+      getCurrentRedBoxes()[k] = nil
+    end
+  end
+
+  for k,v in pairs(getCurrentGreenBoxes()) do
+    if v == stage.getActiveBox() then
+      getCurrentGreenBoxes()[k] = nil
+    end
+  end
+  refreshBoxList()
+end
+
 
 function getCurrentRedBoxes()
   return currentFrameData['redboxes']

@@ -1,7 +1,10 @@
 
 currentFrameImage = nil
 root = "/Users/Cheryl/Desktop/actor/mamizou"
+require 'minibuffer'
 require("datautils")
+
+
 -- frameDatas, a filename -> framedata hash
 frameDatas = {}
 frameDatas = datautils.loadJson()
@@ -9,7 +12,10 @@ currentFrameData = nil
 require("stage")
 function love.load()
   loveframes = require("love-frames")
+
+
   loveframes.util.RemoveAll()
+  require("savestate")
   require("boxLists")
   require("flagLists")
   require("filelist")
@@ -33,7 +39,7 @@ end
 
 function love.update(dt)
 
-    -- your code
+    stage.updateKeyStroke()
     require("lurker").update()
     loveframes.update(dt)
 
@@ -41,6 +47,7 @@ end
 
 function love.draw()
     decorateStage()
+    drawMinibuffer()
     -- your code
 
     loveframes.draw()
@@ -48,17 +55,15 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button)
+   -- your code
 
-    -- your code
-
-    loveframes.mousepressed(x, y, button)
-
+   loveframes.mousepressed(x, y, button)
+   stage.onMouseClick(x,y)
 end
 
 function love.mousereleased(x, y, button)
-
-    -- your code
-
+   -- your code
+   stage.mousereleased(x, y, button)
     loveframes.mousereleased(x, y, button)
 
 end

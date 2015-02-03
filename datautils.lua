@@ -69,4 +69,5 @@ function datautils.saveCurrentState()
   print("===========")
   file:write(str)
   file:close()
+  onSaveBufferOutput()
 end
