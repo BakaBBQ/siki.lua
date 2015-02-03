@@ -55,7 +55,7 @@ function decorateStage()
 
 
   -- I know, I know, all hacked up code, but what the h*ll
-  local inactive_alpha = 40
+  local inactive_alpha = 80
   local active_alpha = 120
   local function drawActiveHitBox(x,y,w,h)
     drawSingleBox(x,y,w,h,{240,10,10,active_alpha + 40},{240,10,10,active_alpha})
@@ -249,7 +249,7 @@ function stage.updateKeyStroke()
     else
       updateMove()
     end
-    
+
 
     updateResize()
     updateDelete()

@@ -1,6 +1,6 @@
 require("filesystem")
 
-
+local json = require('dkjson')
 frame = 0
 frame = loveframes.Create("frame")
 frame:SetName("FileList")
@@ -12,7 +12,7 @@ frame:ShowCloseButton(false)
 local filelist = loveframes.Create("columnlist", frame)
 filelist.defaultcolumnwidth = 175
 filelist:SetPos(5,30)
-filelist:SetSize(frame:GetWidth() - 10, frame:GetHeight() - 60)
+filelist:SetSize(frame:GetWidth() - 10, frame:GetHeight() - 85)
 
 filelist:SetColumnName(1,".w.")
 filelist:Clear()
@@ -21,6 +21,8 @@ filelist:AddColumn("PNG Files")
 
 files = scandir(root)
 function refreshFiles()
+  print(root)
+  files = scandir(root)
   filelist:Clear()
   for k, v in pairs(files) do
     if string.find(v, '.+png') then
@@ -36,10 +38,22 @@ function refreshFiles()
   end
 end
 
+rootTextbox = loveframes.Create("textinput", frame)
+rootTextbox:SetPos(5, 30 + frame:GetHeight() - 80)
+rootTextbox:SetWidth(filelist:GetWidth())
+rootTextbox:SetText(root)
+
 local refreshButton = loveframes.Create("button", frame)
 refreshButton:SetPos(5, 30 + frame:GetHeight() - 60 + 3)
 refreshButton:SetSize(filelist:GetWidth(), 23)
 refreshButton:SetText("Refresh Files")
-refreshButton.OnClick = refreshFiles
+refreshButton.OnClick = function(obj)
+  root = rootTextbox:GetText()
+  file = love.filesystem.newFile(tmp_file, 'w')
+  tmp_tbl = {root=root}
+  file:write(json.encode(tmp_tbl, {indent = true}))
+  refreshFiles()
+end
+
 
 refreshFiles()

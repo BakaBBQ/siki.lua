@@ -1,19 +1,31 @@
 
 currentFrameImage = nil
-root = "/Users/Cheryl/Desktop/actor/mamizou"
+root = os.getenv("HOME")
 require 'minibuffer'
-require("datautils")
-
+require 'datautils'
+local json = require('dkjson')
 
 -- frameDatas, a filename -> framedata hash
 frameDatas = {}
-frameDatas = datautils.loadJson()
+
 currentFrameData = nil
 require("stage")
+
+tmp_file = 'tmp.json'
 function love.load()
+
+  if love.filesystem.exists( tmp_file ) and love.filesystem.isFile(tmp_file) then
+    local contents, size = love.filesystem.read(tmp_file)
+    local obj, pos, err = json.decode(contents, 1, nil)
+    if err then
+      print ("Error: ", err)
+    else
+      root = obj.root
+    end
+  else
+    root = os.getenv("HOME")
+  end
   loveframes = require("love-frames")
-
-
   loveframes.util.RemoveAll()
   require("savestate")
   require("boxLists")
@@ -22,6 +34,9 @@ function love.load()
 end
 
 function loadFrame(relative_path)
+  if frameDatas == {} then
+    frameDatas = datautils.loadJson()
+  end
   local absolute_path = root .. '/' .. relative_path
   print(absolute_path)
   local f = io.open(absolute_path)
