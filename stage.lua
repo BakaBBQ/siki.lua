@@ -61,6 +61,7 @@ function decorateStage()
     drawSingleBox(x,y,w,h,{240,10,10,active_alpha + 40},{240,10,10,active_alpha})
   end
 
+  -- i need to refactor this
   local function drawInactiveHitBox(x,y,w,h)
     drawSingleBox(x,y,w,h,{240,10,10,inactive_alpha + 40},{240,10,10,inactive_alpha})
   end
@@ -73,14 +74,27 @@ function decorateStage()
     drawSingleBox(x,y,w,h,{10,240,10,inactive_alpha + 40},{10,240,10,inactive_alpha})
   end
 
+  local function drawActiveCollisionBox(x,y,w,h)
+    drawSingleBox(x,y,w,h,{240,240,240,active_alpha + 40},{240,240,240,active_alpha})
+  end
+
+  local function drawInactiveCollisionBox(x,y,w,h)
+    drawSingleBox(x,y,w,h,{240,240,240,inactive_alpha + 40},{240,240,240,inactive_alpha})
+  end
+
+
   local function drawAllBoxes()
-    for k,v in pairs(getCurrentRedBoxes()) do
+    for k,v in pairs(getCurrentWhiteBoxes()) do
       if v.active then
-        drawActiveHitBox(v.x,v.y,v.w,v.h)
+        drawActiveCollisionBox(v.x,v.y,v.w,v.h)
       else
-        drawInactiveHitBox(v.x,v.y,v.w,v.h)
+        drawInactiveCollisionBox(v.x,v.y,v.w,v.h)
       end
+
     end
+
+
+
 
     for k,v in pairs(getCurrentGreenBoxes()) do
       if v.active then
@@ -90,6 +104,16 @@ function decorateStage()
       end
 
     end
+
+    for k,v in pairs(getCurrentRedBoxes()) do
+      if v.active then
+        drawActiveHitBox(v.x,v.y,v.w,v.h)
+      else
+        drawInactiveHitBox(v.x,v.y,v.w,v.h)
+      end
+    end
+
+
 
   end
 
@@ -118,6 +142,12 @@ function stage.getActiveBox()
    end
 
    for k,v in pairs(getCurrentRedBoxes()) do
+      if v.active then
+         return v
+      end
+   end
+
+   for k,v in pairs(getCurrentWhiteBoxes()) do
       if v.active then
          return v
       end
@@ -173,6 +203,17 @@ function stage.onMouseClick(x,y)
     end
 
     for k,v in pairs(getCurrentRedBoxes()) do
+      local rect = v
+      v.active = false
+      print(rect.x .. " " .. rect.y)
+      if (fx > rect.x and fx < (rect.x + rect.w)) and (fy < rect.y and fy > (rect.y - rect.h)) then
+        print("within find range")
+        v.active = true
+        print(v == rect)
+      end
+    end
+
+    for k,v in pairs(getCurrentWhiteBoxes()) do
       local rect = v
       v.active = false
       print(rect.x .. " " .. rect.y)

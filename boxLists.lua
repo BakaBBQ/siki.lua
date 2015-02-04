@@ -27,8 +27,8 @@ end
 
 
 local createRedButton = loveframes.Create("button",boxListFrame)
-createRedButton:SetWidth((boxListFrame:GetWidth() - 10)/3)
-createRedButton:SetText("Create Hitbox")
+createRedButton:SetWidth((boxListFrame:GetWidth() - 10)/4)
+createRedButton:SetText("+Hitbox")
 createRedButton:SetPos(8, boxListFrame:GetHeight() - 28)
 createRedButton.OnClick = function(object)
   if currentFrameData then
@@ -44,7 +44,7 @@ end
 
 local createGreenButton = loveframes.Create("button", boxListFrame)
 createGreenButton:SetWidth(createRedButton:GetWidth())
-createGreenButton:SetText("Create Hurtbox")
+createGreenButton:SetText("+Hurtbox")
 createGreenButton:SetPos(createRedButton:GetX() + createRedButton:GetWidth(), boxListFrame:GetHeight() - 28)
 createGreenButton.OnClick = function(object)
   if currentFrameData then
@@ -53,13 +53,25 @@ createGreenButton.OnClick = function(object)
   else
     minibuffer = 'load a frame first'
   end
-
-
 end
+
+local createWhiteButton = loveframes.Create("button", boxListFrame)
+createWhiteButton:SetWidth(createRedButton:GetWidth())
+createWhiteButton:SetText("+Collisionbox")
+createWhiteButton:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 2, boxListFrame:GetHeight() - 28)
+createWhiteButton.OnClick = function(object)
+  if currentFrameData then
+    addNewWhiteBox()
+    refreshBoxList()
+  else
+    minibuffer = 'load a frame first'
+  end
+end
+
 local deleteBox = loveframes.Create("button", boxListFrame)
 deleteBox:SetWidth(createRedButton:GetWidth())
 deleteBox:SetText("Delete Box")
-deleteBox:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 2, boxListFrame:GetHeight() - 28)
+deleteBox:SetPos(createGreenButton:GetX() + createGreenButton:GetWidth() * 3, boxListFrame:GetHeight() - 28)
 deleteBox.OnClick = function(object)
   if currentFrameData then
     deleteActiveBox()
@@ -81,6 +93,12 @@ function deleteActiveBox()
       getCurrentGreenBoxes()[k] = nil
     end
   end
+
+  for k,v in pairs(getCurrentWhiteBoxes()) do
+    if v == stage.getActiveBox() then
+      getCurrentWhiteBoxes()[k] = nil
+    end
+  end
   refreshBoxList()
 end
 
@@ -93,12 +111,21 @@ function getCurrentGreenBoxes()
   return currentFrameData['greenboxes']
 end
 
+function getCurrentWhiteBoxes()
+  return currentFrameData['whiteboxes']
+end
+
+
 function addNewRedBox()
   table.insert(currentFrameData['redboxes'], newRedBox())
 end
 
 function addNewGreenBox()
   table.insert(currentFrameData['greenboxes'], newGreenBox())
+end
+
+function addNewWhiteBox()
+  table.insert(currentFrameData['whiteboxes'], newBox())
 end
 
 
@@ -117,5 +144,10 @@ function refreshBoxList()
   for k, v in pairs(getCurrentGreenBoxes()) do
     local rect = v
     boxlist:AddRow("HurtBox", rect['x'] .. ', ' .. rect['y'], rect['w'] .. ', ' .. rect['h'])
+  end
+
+  for k, v in pairs(getCurrentWhiteBoxes()) do
+    local rect = v
+    boxlist:AddRow("CollisionBox", rect['x'] .. ', ' .. rect['y'], rect['w'] .. ', ' .. rect['h'])
   end
 end

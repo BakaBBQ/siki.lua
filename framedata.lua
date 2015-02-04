@@ -31,7 +31,7 @@ function newFrameData()
   return {
     redboxes = {};
     greenboxes = {};
+    whiteboxes = {};
     flags = {};
-    center = {0,0}
   }
 end

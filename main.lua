@@ -4,7 +4,7 @@ root = os.getenv("HOME")
 require 'minibuffer'
 require 'datautils'
 local json = require('dkjson')
-
+local inspect = require 'inspect'
 -- frameDatas, a filename -> framedata hash
 frameDatas = {}
 
@@ -34,8 +34,12 @@ function love.load()
 end
 
 function loadFrame(relative_path)
-  if frameDatas == {} then
+  if #frameDatas == 0 then
+    print("Blank frame data, loading json")
     frameDatas = datautils.loadJson()
+  else
+    print("Already inited frameData")
+    print(inspect(frameDatas))
   end
   local absolute_path = root .. '/' .. relative_path
   print(absolute_path)

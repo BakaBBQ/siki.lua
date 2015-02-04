@@ -33,7 +33,9 @@ function datautils.loadJson()
 
 
   if file_exists(filename) then
+    print("Find .frames")
   else
+    print(".frames does not exist, creating blank data")
     createBlankJson()
   end
 
