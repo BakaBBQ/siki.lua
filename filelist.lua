@@ -49,6 +49,7 @@ refreshButton:SetSize(filelist:GetWidth(), 23)
 refreshButton:SetText("Refresh Files")
 refreshButton.OnClick = function(obj)
   root = rootTextbox:GetText()
+  updateRoot()
   file = love.filesystem.newFile(tmp_file, 'w')
   tmp_tbl = {root=root}
   file:write(json.encode(tmp_tbl, {indent = true}))

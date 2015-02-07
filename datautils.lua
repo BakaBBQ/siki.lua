@@ -60,6 +60,9 @@ function datautils.retrieveFrameData(filename)
   return frameDatas[filename]
 end
 
+function updateRoot()
+  filename = root .. '/' .. 'frames.json'
+end
 
 
 
@@ -67,7 +70,7 @@ function datautils.saveCurrentState()
   local str = json.encode(frameDatas, {indent=true})
   local file = io.open(filename, "w")
   print("===========")
-  print(str)
+  print("Saved to: " .. filename)
   print("===========")
   file:write(str)
   file:close()
