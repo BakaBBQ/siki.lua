@@ -3,6 +3,10 @@ local json = require("dkjson")
 datautils = {}
 currentFileName = 0
 local filename = root .. '/' .. 'frames.json'
+function getFilename()
+  return root .. '/' .. 'frames.json'
+end
+
 function readAll(file)
     local f = io.open(file, "rb")
     local content = f:read("*all")
@@ -68,9 +72,9 @@ end
 
 function datautils.saveCurrentState()
   local str = json.encode(frameDatas, {indent=true})
-  local file = io.open(filename, "w")
+  local file = io.open(getFilename(), "w")
   print("===========")
-  print("Saved to: " .. filename)
+  print("Saved to: " .. getFilename())
   print("===========")
   file:write(str)
   file:close()
