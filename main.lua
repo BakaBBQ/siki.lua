@@ -57,7 +57,6 @@ end
 
 
 function love.update(dt)
-
     stage.updateKeyStroke()
     require("lurker").update()
     loveframes.update(dt)
@@ -67,46 +66,28 @@ end
 function love.draw()
     decorateStage()
     drawMinibuffer()
-    -- your code
-
     loveframes.draw()
-
 end
 
 function love.mousepressed(x, y, button)
-   -- your code
-
    loveframes.mousepressed(x, y, button)
    stage.onMouseClick(x,y)
 end
 
 function love.mousereleased(x, y, button)
-   -- your code
    stage.mousereleased(x, y, button)
-    loveframes.mousereleased(x, y, button)
+   loveframes.mousereleased(x, y, button)
 
 end
 
 function love.keypressed(key, unicode)
-
-    -- your code
-
     loveframes.keypressed(key, unicode)
-
 end
 
 function love.keyreleased(key)
-
-    -- your code
-
     loveframes.keyreleased(key)
-
 end
 
 function love.textinput(text)
-
-    -- your code
-
     loveframes.textinput(text)
-
 end
