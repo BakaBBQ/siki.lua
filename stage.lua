@@ -286,11 +286,14 @@ function stage.updateKeyStroke()
       end
     end
 
+
+
     if(updateSave()) then
     else
       updateMove()
     end
 
+    
 
     updateResize()
     updateDelete()

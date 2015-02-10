@@ -2,7 +2,7 @@ require('framedata')
 local json = require("dkjson")
 datautils = {}
 currentFileName = 0
-local filename = root .. '/' .. 'frames.json'
+
 function getFilename()
   return root .. '/' .. 'frames.json'
 end
@@ -34,8 +34,7 @@ end
 -- it shouldn't check for file existence... too lazy to fix that design flaw
 function datautils.loadJson()
   local function createBlankJson()
-    print(filename)
-    local file = io.open(filename, "w")
+    local file = io.open(getFilename(), "w")
     local blank_tbl = {}
     local str = json.encode(blank_tbl, {indent=true})
     file:write(str)
@@ -44,14 +43,14 @@ function datautils.loadJson()
 
 
 
-  if file_exists(filename) then
-    print("Find .frames")
+  if file_exists(getFilename()) then
+    print("Find .frames at: " .. getFilename())
   else
     print(".frames does not exist, creating blank data")
     createBlankJson()
   end
 
-  local c = readAll(filename)
+  local c = readAll(getFilename())
   local obj, pos, err = json.decode(c, 1, nil)
   if err then
     print ("Json Error: ", err)
@@ -61,20 +60,22 @@ function datautils.loadJson()
 
 end
 
-function datautils.retrieveFrameData(filename)
-  print("Retrieving frame data for: " .. filename)
-  if frameDatas[filename] then
-    print(frameDatas[filename])
+function datautils.retrieveFrameData(fn)
+  print("Retrieving frame data for: " .. fn)
+  if frameDatas[fn] then
+    print("Found, now loading: " .. json.encode(frameDatas[fn]))
+    if frameDatas[fn] == nil then
+      error()
+    end
+
   else
-    print("Creating new frame data for: " .. filename)
-    frameDatas[filename] = newFrameData()
+    print("Creating NEW frame data for: " .. fn)
+    frameDatas[fn] = newFrameData()
   end
-  return frameDatas[filename]
+  return frameDatas[fn]
 end
 
-function updateRoot()
-  filename = root .. '/' .. 'frames.json'
-end
+
 
 local function parseToPossibleInt(flagList)
   for k,v in pairs(flagList) do
@@ -95,27 +96,22 @@ local function parseToPossibleBool(flagList)
 end
 
 
+local function deepcopy(orig)
+  local orig_type = type(orig)
+  local copy
+  if orig_type == 'table' then
+      copy = {}
+      for orig_key, orig_value in next, orig, nil do
+          copy[deepcopy(orig_key)] = deepcopy(orig_value)
+      end
+      setmetatable(copy, deepcopy(getmetatable(orig)))
+  else -- number, string, boolean, etc
+      copy = orig
+  end
+  return copy
+end
 
 function datautils.getProductionVersion()
-
-
-
-
-  local function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-  end
-
   local function cleanActive(frameData) -- unclean
     for k, v in pairs(frameData.redboxes) do
       v.active = nil
@@ -134,19 +130,17 @@ function datautils.getProductionVersion()
   for k,v in pairs(dupData) do
     cleanActive(v) -- we do not need to save the active state
     v.flags = nil
-    v.flags = nil
   end
   return dupData
 end
 
 function datautils.getSeperateFlags()
-  tbl = {}
+  local tbl = {}
   for k,v in pairs(frameDatas) do
     tbl[k] = v.flags
     parseToPossibleBool(v.flags)
     parseToPossibleInt(v.flags)
   end
-
   return tbl
 end
 
@@ -158,10 +152,10 @@ function datautils.saveCurrentState()
   onSaveBufferOutput()
 end
 
-function datautils.saveJsonState(tbl, filename)
+function datautils.saveJsonState(tbl, fn)
   local str = json.encode(tbl, {indent=true})
-  local file = io.open(filename, "w")
-  print("Save TBL to: " .. filename)
+  local file = io.open(fn, "w")
+  print("Save TBL to: " .. fn)
   file:write(str)
   file:close()
 end

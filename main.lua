@@ -23,6 +23,7 @@ function love.load()
       root = obj.root
     end
   else
+    print("[WARNING] cannot find tmp file, using the user home")
     root = os.getenv("HOME")
   end
   loveframes = require("love-frames")
@@ -33,7 +34,7 @@ function love.load()
   require("filelist")
 end
 
-function loadFrame(relative_path)
+function loadFrame(relative_path) -- just the filename... no path...
   if #frameDatas == 0 then
     print("Blank frame data, loading json")
     frameDatas = datautils.loadJson()
@@ -42,12 +43,12 @@ function loadFrame(relative_path)
     print(inspect(frameDatas))
   end
   local absolute_path = root .. '/' .. relative_path
-  print(absolute_path)
+  print("Absolute Path: " .. absolute_path)
   local f = io.open(absolute_path)
   local contents = f:read('*a')
   f:close()
   currentFrameData = datautils.retrieveFrameData(relative_path)
-  print(currentFrameData)
+  print("Current Frame Data: " .. inspect(frameDatas))
   image = love.graphics.newImage(love.image.newImageData(love.filesystem.newFileData(contents, 'Images/character.png')))
   datautils.saveCurrentState()
   refreshFlagList()
@@ -58,8 +59,12 @@ end
 
 function love.update(dt)
     stage.updateKeyStroke()
+    if love.keyboard.isDown("p") then
+      print(inspect(frameDatas))
+    end
     require("lurker").update()
     loveframes.update(dt)
+
 
 end
 
